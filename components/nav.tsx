@@ -25,14 +25,14 @@ const Nav = async () => {
             
             navItems.map((item) => (
               <li key={item.ID}>
-                <Link href={getSlug(item.url)}>{item.title}</Link>
+                <Link href={`/${getSlug(item.url)}`}>{item.title}</Link>
 
                 {item.children && item.children.length > 0 && (
                   <ul>
                     {
                       item.children.map((child) => (
                         <li key={child.ID}>
-                          <Link href={getSlug(child.url)}>{child.title}</Link>
+                          <Link href={`/${getSlug(child.url)}`}>{child.title}</Link>
                         </li>
                       ))
                     }
