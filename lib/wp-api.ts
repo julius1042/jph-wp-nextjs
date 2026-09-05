@@ -72,7 +72,7 @@ export async function getPageDataBySlug( slug: string ){
     }
 }
 
-export async function getPageDataByPageId( id: Number ){
+export async function getPageDataByPageId( pageId: number ){
 
 
     if(!WORDPRESS_HOME_URL){
@@ -82,7 +82,7 @@ export async function getPageDataByPageId( id: Number ){
 
     try{
 
-        const response = await fetch(`${WORDPRESS_HOME_URL}/wp-json/wp/v2/pages/${id}`)
+        const response = await fetch(`${WORDPRESS_HOME_URL}/wp-json/wp/v2/pages/${pageId}`)
        
         if(!response.ok) throw new Error(`HTTP error status: ${response.status}`)
         
@@ -102,7 +102,7 @@ export async function getPageDataByPageId( id: Number ){
        
 
     }catch(error){
-        console.log(`Failed to fetch data for the page ID ${id}: ${error}`);
+        console.log(`Failed to fetch data for the page ID ${pageId}: ${error}`);
         return null
     }
 }
@@ -124,4 +124,32 @@ export async function getMenuItems(): Promise<MenuItem[]>{
     const data = await response.json();
 
     return data;
+}
+
+export async function getPageBlocks(pageId: number) {
+  if (!WORDPRESS_HOME_URL) {
+    console.log('Missing WORDPRESS_HOME_URL environment variable');
+    return [];
+  }
+
+  try {
+    const response = await fetch(
+      `${WORDPRESS_HOME_URL}/wp-json/jph/v1/page-blocks/${pageId}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error status: ${response.status}`);
+    }
+
+    const blocks = await response.json();
+
+    return blocks;
+  } catch (error) {
+    console.log(
+      `Failed to fetch Gutenberg blocks for page ${pageId}:`,
+      error
+    );
+
+    return [];
+  }
 }

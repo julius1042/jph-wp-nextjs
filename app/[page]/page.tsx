@@ -1,5 +1,6 @@
 const WORDPRESS_HOME_URL=process.env.WORDPRESS_HOME_URL
-import { getPageDataBySlug } from '@/lib/wp-api'
+import { getPageDataBySlug, getPageBlocks } from '@/lib/wp-api'
+import GutenbergBlocks from '@/components/gutenberg/GutenbergBlocks';
 import Nav from '@/components/nav'
 
 type Props = {
@@ -12,22 +13,23 @@ const Pages = async ({ params }: Props) => {
   const { page } = await params;
   const pageResult = await getPageDataBySlug(page);
 
-  
-
   if (!pageResult) {
     return <div>Page not found</div>;
   }
 
+   const blocks = await getPageBlocks(pageResult.id);
+   
   return (
     <main>
       <Nav />
       <h1>{pageResult.title.rendered}</h1>
 
-      <div
+      {/* <div
         dangerouslySetInnerHTML={{
           __html: pageResult.content.rendered,
         }}
-      />
+      /> */}
+      <GutenbergBlocks blocks={blocks} />
     </main>
   );
 };
