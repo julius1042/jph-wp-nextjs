@@ -4,6 +4,7 @@
 @import '@wordpress/block-library/build-style/theme.css';
 @import 'wp-block-styles';
 @import 'wp-block-styles/index.min.css';
+@import 'animate.css';
 
 
 :root {
