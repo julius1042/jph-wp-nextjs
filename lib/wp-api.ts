@@ -153,3 +153,77 @@ export async function getPageBlocks(pageId: number) {
     return [];
   }
 }
+
+
+export async function getPosts() {
+  if (!WORDPRESS_HOME_URL) {
+    console.error(
+      'Missing WORDPRESS_HOME_URL environment variable'
+    );
+
+    return [];
+  }
+
+  try {
+    const response = await fetch(
+      `${WORDPRESS_HOME_URL}/wp-json/wp/v2/posts`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    // console.log('WP POSTS:', data);
+
+    return data ?? [];
+
+  } catch (error) {
+    console.error(
+      'Failed to fetch posts:',
+      error
+    );
+
+    return [];
+  }
+}
+
+export async function getPostBySlug(slug: string) {
+  if (!WORDPRESS_HOME_URL) {
+    console.error(
+      'Missing WORDPRESS_HOME_URL environment variable'
+    );
+
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `${WORDPRESS_HOME_URL}/wp-json/wp/v2/posts?slug=${slug}`
+        
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    
+    // WordPress returns an array when
+    // searching by slug.
+    return data.length > 0 ? data[0] : null;
+
+  } catch (error) {
+    console.error(
+      'Failed to fetch post:',
+      error
+    );
+
+    return null;
+  }
+}
